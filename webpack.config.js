@@ -5,6 +5,8 @@ const path = require('path');
 const optimizationConfig = require('./webpack_settings/optimization.js');
 const babelLoaderSettings = require('./webpack_settings/loaderSettings/babel-loader.js');
 const tsLoaderSettings = require('./webpack_settings/loaderSettings/ts-loader.js');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = (env, argv) => {
   const isDev = argv.mode === 'development';
@@ -14,7 +16,7 @@ module.exports = (env, argv) => {
     entry: './src/index.tsx',
     output: {
       filename: '[name].bundle.js',
-      publicPath: 'dist/',
+      publicPath: '/',
       path: path.join(__dirname, 'dist'),
     },
     devtool: isDev ? 'eval-cheap-module-source-map' : false,
@@ -27,8 +29,6 @@ module.exports = (env, argv) => {
     optimization: optimizationConfig(isDev),
     devServer: {
       static: {
-        directory: path.join(__dirname, 'dist'),
-        // publicPath: '/dist',
         serveIndex: true,
         watch: true,
       },
@@ -48,7 +48,31 @@ module.exports = (env, argv) => {
         {
           test: /\.(ts|tsx)$/,
           exclude: /node_modules/,
-          use: [babelLoaderSettings(isDev), tsLoaderSettings(isDev)],
+          use: [
+            babelLoaderSettings(isDev),
+            {
+              loader: '@linaria/webpack-loader',
+              options: {
+                sourceMap: isDev,
+              },
+            },
+            tsLoaderSettings(isDev)
+          ],
+        },
+
+        {
+          test: /\.css$/,
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+            },
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: process.env.NODE_ENV !== 'production',
+              },
+            },
+          ],
         },
 
         // vue
@@ -95,6 +119,13 @@ module.exports = (env, argv) => {
       // // eslint-loaderは非推奨
       // // TODO: eslint-webpack-pluginとprettierの併用を調査
       // new ESLintPlugin(),
+      new MiniCssExtractPlugin({
+        filename: 'styles.css',
+      }),
+      new HtmlWebpackPlugin({
+        template: './index.html',
+        filename: 'index.html',
+      }),
     ],
   };
 };
