@@ -5,6 +5,7 @@ import TextArea from "../components/TextArea";
 import Header from "../components/Header";
 import { css } from "@linaria/core";
 import useStorage from "../hooks/useStorage";
+import initialMarkdown from "../config/initialMarkdown";
 
 const editor = css`
   display: flex;
@@ -14,7 +15,7 @@ const editor = css`
 `;
 
 const Editor: VFC = () => {
-  const [value, setStorage] = useStorage("editor", "");
+  const [value, setStorage] = useStorage("editor", initialMarkdown);
   const handleChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
     const inputValue = e.currentTarget.value;
     setStorage(inputValue);

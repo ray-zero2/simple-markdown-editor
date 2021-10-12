@@ -5,7 +5,7 @@ type StorageKeyName = keyof typeof STORAGE_KEYS;
 
 const useStorage = (storageKey: StorageKeyName, initValue?: string) => {
   const storageValue = localStorage.getItem(storageKey);
-  const startValue = storageValue ?? initValue ?? "";
+  const startValue = storageValue || initValue || "";
   const [value, setValue] = useState(startValue);
 
   const setStorage = useCallback((value: string) => {
