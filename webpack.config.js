@@ -16,7 +16,7 @@ module.exports = (env, argv) => {
     entry: './src/index.tsx',
     output: {
       filename: '[name].bundle.js',
-      publicPath: '/',
+      publicPath: './',
       path: path.join(__dirname, 'dist'),
     },
     devtool: isDev ? 'eval-cheap-module-source-map' : false,
