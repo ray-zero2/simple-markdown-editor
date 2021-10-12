@@ -18,7 +18,9 @@ interface IProps {
 const textarea = css`
   border: solid 1px #333;
   display: block;
+  height: 100%;
   overflow-y: scroll;
+  padding: 16px;
 `;
 
 const TextArea: VFC<IProps> = ({ value, handleChange }) => {
