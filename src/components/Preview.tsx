@@ -36,7 +36,7 @@ const Preview: VFC<IProps> = ({ value }) => {
                 style={dark}
                 language={match[1]}
                 PreTag="div"
-                {...props}
+                // {...props}
               />
             ) : (
               <code className={className} {...props}>
